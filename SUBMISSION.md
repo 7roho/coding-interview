@@ -2,15 +2,11 @@
 
 자료 등록 → 근거 연결 → 검토 작성·수정 → 현황 확인까지 필수 기능을 모두 구현했고, 끝난 뒤 선택 구현인 AI 검토 초안도 붙였습니다.
 
-## 실행 전에 확인해 주세요
+## 실행 전에
 
-제공된 스켈레톤을 그대로 새로 clone하면 web 컨테이너가 뜨지 않습니다. `compose.yaml`이 `ui-kit`을 읽기 전용으로 마운트하는데, pnpm이 `ui-kit/node_modules`에 의존성을 연결하려다 실패하기 때문입니다. 이 저장소에는 해결 파일이 들어 있어서 따로 하실 일은 없고, `make dev`만 실행하시면 됩니다.
+제출 직전에 GitHub에서 새로 clone해서 돌려 봤더니 web 컨테이너가 뜨지 않았습니다. `compose.yaml`이 `ui-kit`을 읽기 전용으로 마운트하는데, pnpm이 그 안의 `node_modules`에 의존성을 연결하지 못해서였습니다. 제 PC에는 첫날 환경을 맞추면서 만든 설정이 남아 있어서 그동안 몰랐습니다.
 
-- `compose.override.yaml`: docker compose가 자동으로 함께 읽는 파일입니다. `ui-kit/node_modules`에만 쓰기 가능한 볼륨을 붙입니다. `compose.yaml`은 수정하지 않았습니다.
-- `ui-kit/node_modules/.gitkeep`: 마운트 지점이 clone에도 남도록 넣은 빈 파일입니다.
-- `.gitattributes`: Windows에서 clone해도 셸 스크립트가 CRLF로 바뀌어 `set: illegal option -`로 멈추지 않도록 LF를 고정합니다.
-
-새로 clone한 상태에서 `make dev`, E2E 24개가 통과하는 것까지 확인했습니다.
+`compose.yaml`은 그대로 두고, docker compose가 자동으로 같이 읽는 `compose.override.yaml`에서 그 폴더에만 쓰기 가능한 볼륨을 붙였습니다. 마운트할 자리가 clone에도 남도록 `ui-kit/node_modules/.gitkeep`을 넣었고, Windows에서 받으면 셸 스크립트 줄바꿈이 CRLF로 바뀌어 멈추는 것도 `.gitattributes`로 막았습니다. 새로 clone한 상태에서 `make dev`와 E2E 24개가 통과하는 것까지 확인했으니, 따로 하실 일은 없습니다.
 
 ## 실행
 
