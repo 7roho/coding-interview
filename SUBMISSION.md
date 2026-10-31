@@ -2,6 +2,16 @@
 
 자료 등록 → 근거 연결 → 검토 작성·수정 → 현황 확인까지 필수 기능을 모두 구현했고, 끝난 뒤 선택 구현인 AI 검토 초안도 붙였습니다.
 
+## 실행 전에 확인해 주세요
+
+제공된 스켈레톤을 그대로 새로 clone하면 web 컨테이너가 뜨지 않습니다. `compose.yaml`이 `ui-kit`을 읽기 전용으로 마운트하는데, pnpm이 `ui-kit/node_modules`에 의존성을 연결하려다 실패하기 때문입니다. 이 저장소에는 해결 파일이 들어 있어서 따로 하실 일은 없고, `make dev`만 실행하시면 됩니다.
+
+- `compose.override.yaml`: docker compose가 자동으로 함께 읽는 파일입니다. `ui-kit/node_modules`에만 쓰기 가능한 볼륨을 붙입니다. `compose.yaml`은 수정하지 않았습니다.
+- `ui-kit/node_modules/.gitkeep`: 마운트 지점이 clone에도 남도록 넣은 빈 파일입니다.
+- `.gitattributes`: Windows에서 clone해도 셸 스크립트가 CRLF로 바뀌어 `set: illegal option -`로 멈추지 않도록 LF를 고정합니다.
+
+새로 clone한 상태에서 `make dev`, E2E 24개가 통과하는 것까지 확인했습니다.
+
 ## 실행
 
 ```sh
@@ -13,7 +23,6 @@ docker compose exec api cargo test --manifest-path api/Cargo.toml   # Rust 테�
 ```
 
 제 개발 환경은 Windows라 `make`가 없어서, Makefile의 각 타깃이 실행하는 docker compose 명령을 그대로 입력해 작업했습니다. Makefile과 스크립트는 수정하지 않았으니 README대로 `make`를 쓰시면 됩니다.
-
 계정 비밀번호는 모두 `dataroom`입니다. `company@lighthouse.test`로 자료를 올리고, `investor@lighthouse.test`로 검토를 쓴 다음, `peer@lighthouse.test`로 들어가서 앞 투자자의 검토가 안 보이는지 확인하시면 흐름이 한 번에 보입니다. 올려 볼 파일은 `samples/revenue-update.md`를 쓰시면 됩니다. 일부러 시드에는 넣지 않았습니다.
 
 0003 마이그레이션에 `samples/scenario.json`의 데이터룸 설명과 자료 4건을 넣었습니다. 상태는 ready 2건, failed 1건, processing 1건입니다. 브라우저 테스트를 여러 번 돌리면 테스트 자료가 목록에 쌓이니, 깨끗한 화면이 필요하면 `make reset-db` 후 다시 켜 주세요.
